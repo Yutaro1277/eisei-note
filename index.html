@@ -513,9 +513,13 @@ document.addEventListener("visibilitychange",()=>{if(!document.hidden&&jst()!==T
 
 /* ---------- boot ---------- */
 async function loadQuestions(){
-  try{const r=await fetch("questions.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw 0;const j=await r.json();
-    const m={};for(const q of j.questions||[])if(q&&q.id&&Array.isArray(q.c)&&q.c.length===5)m[q.id]=q;S.questions=m;S.qMeta={updated:j.updated};
-  }catch(e){if(!Object.keys(S.questions).length)toast("問題を読み込めませんでした")}
+  const m={};let updated="";
+  const add=j=>{for(const q of (j&&j.questions)||[])if(q&&q.id&&Array.isArray(q.c)&&q.c.length===5&&Number.isInteger(q.a))m[q.id]=q;if(j&&j.updated&&j.updated>updated)updated=j.updated};
+  try{const r=await fetch("questions.json?t="+Date.now(),{cache:"no-store"});if(r.ok)add(await r.json())}catch(e){}
+  try{const r=await fetch("q/index.json?t="+Date.now(),{cache:"no-store"});
+    if(r.ok){const idx=await r.json();const list=(idx.files||[]).filter(f=>/^[\w.-]+\.json$/.test(f));
+      const res=await Promise.all(list.map(f=>fetch("q/"+f,{cache:"no-cache"}).then(x=>x.ok?x.json():null).catch(()=>null)));res.forEach(add)}}catch(e){}
+  if(Object.keys(m).length){S.questions=m;S.qMeta={updated}}else if(!Object.keys(S.questions).length)toast("問題を読み込めませんでした");
 }
 (async()=>{
   S.data=load();
