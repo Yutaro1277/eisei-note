@@ -1,0 +1,16 @@
+{
+  "name": "合格ノート 第一種衛生管理者",
+  "short_name": "合格ノート",
+  "description": "第一種衛生管理者試験の毎日10問・解説・苦手復習・分析",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f3f6f4",
+  "theme_color": "#08794a",
+  "lang": "ja",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
